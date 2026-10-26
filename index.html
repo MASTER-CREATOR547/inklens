@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#f7f8fc"><meta name="description" content="InkLens turns images into editable text in your browser. Upload a picture, extract text, then copy or download the result.">
+<title>InkLens — Image to Text</title>
+<script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
+<style>
+:root{font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:#18233a;background:#f7f8fc;font-synthesis:none}*{box-sizing:border-box}body{margin:0}button,input,select,textarea{font:inherit}button{cursor:pointer}.top{height:76px;display:flex;align-items:center;justify-content:space-between;padding:0 max(24px,calc((100vw - 1100px)/2));border-bottom:1px solid #e8ebf3;background:#ffffffd9}.brand{font-size:24px;font-weight:850;letter-spacing:-1px;color:#1b2841;text-decoration:none;display:flex;align-items:center;gap:10px}.mark{width:36px;height:36px;border-radius:11px;background:#5b5ce2;color:white;display:grid;place-items:center;font-size:21px}.brand span:last-child span{color:#5b5ce2}.tag{font-size:13px;color:#606c82}.wrap{max-width:1050px;margin:auto;padding:62px 24px 70px}.eyebrow{color:#5b5ce2;font-size:12px;letter-spacing:1.8px;font-weight:800;text-transform:uppercase}.hero{text-align:center;max-width:740px;margin:0 auto 38px}.hero h1{font-size:clamp(38px,6vw,58px);letter-spacing:-2.7px;line-height:1.06;margin:15px 0}.hero h1 em{font-style:normal;color:#5b5ce2}.hero p{font-size:17px;line-height:1.7;color:#66718a;margin:0 auto;max-width:600px}.workspace{display:grid;grid-template-columns:1fr 1fr;gap:18px;align-items:stretch}.panel{background:white;border:1px solid #e4e8f2;border-radius:18px;padding:22px;box-shadow:0 8px 30px #263b6508;min-width:0}.panel-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:17px}.panel h2{font-size:16px;margin:0;letter-spacing:-.3px}.step{font-size:11px;color:#727d92;background:#f0f2f8;border-radius:7px;padding:6px 8px;font-weight:750}.drop{min-height:265px;border:1.5px dashed #cdd3e5;border-radius:13px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:20px;transition:.15s;background:#fbfcff}.drop.over{border-color:#5b5ce2;background:#f3f3ff}.upload-icon{width:54px;height:54px;border-radius:16px;background:#eeefff;color:#5b5ce2;display:grid;place-items:center;font-size:25px;margin-bottom:15px}.drop strong{font-size:15px}.drop p{font-size:12px;color:#8992a5;margin:8px 0 15px}.btn{border:0;border-radius:9px;background:#5b5ce2;color:white;padding:11px 16px;font-weight:750;font-size:13px;box-shadow:0 4px 12px #5b5ce222}.btn:disabled{opacity:.45;cursor:not-allowed}.btn.secondary{background:#f0f1f8;color:#39445d;box-shadow:none}.preview{width:100%;max-height:220px;object-fit:contain;border-radius:9px;margin-top:15px}.controls{display:flex;align-items:center;gap:10px;margin-top:15px}.controls label{font-size:12px;color:#69748a;font-weight:700}.controls select{min-width:0;flex:1;border:1px solid #dce1ed;border-radius:8px;padding:10px;background:white;color:#28334a}.controls .btn{white-space:nowrap}.hint{font-size:11px;line-height:1.6;color:#929aad;margin:13px 0 0}.output{display:flex;flex-direction:column;min-height:100%}.result{width:100%;flex:1;min-height:280px;resize:vertical;border:1px solid #e4e8f1;border-radius:11px;background:#fcfcfe;padding:15px;font-size:13px;line-height:1.7;color:#26334c;outline:none}.result:focus{border-color:#9a9af1}.result::placeholder{color:#a1a9b9}.progress-wrap{height:5px;background:#eff0f8;border-radius:99px;overflow:hidden;margin:12px 0}.progress{height:100%;width:0;background:#5b5ce2;transition:width .2s}.status{font-size:12px;color:#6c7690;min-height:18px;margin:8px 0}.actions{display:flex;gap:9px;margin-top:13px}.actions .btn{flex:1}.foot{text-align:center;color:#929aad;font-size:12px;margin-top:28px;line-height:1.6}.foot strong{color:#5b6579}.sr{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}@media(max-width:720px){.top{height:66px;padding:0 18px}.tag{display:none}.wrap{padding:43px 16px}.hero{margin-bottom:27px}.hero p{font-size:15px}.workspace{grid-template-columns:1fr}.panel{padding:17px}.drop{min-height:220px}.result{min-height:240px}}
+</style>
+</head>
+<body>
+<header class="top"><a class="brand" href="#"><span class="mark">▤</span><span>Ink<span>Lens</span></span></a><span class="tag">IMAGE TO TEXT · SIMPLE, PRIVATE, FAST</span></header>
+<main class="wrap">
+<section class="hero"><div class="eyebrow">Your words, unlocked</div><h1>Turn any image into <em>editable text.</em></h1><p>Upload a photo or screenshot and let InkLens extract the words. Edit the result, copy it, or save it as a text file.</p></section>
+<section class="workspace" aria-label="Image to text workspace">
+<div class="panel"><div class="panel-head"><h2>Upload an image</h2><span class="step">STEP 01</span></div>
+<div id="drop" class="drop" tabindex="0" role="button" aria-label="Choose or drop an image"><div class="upload-icon">↑</div><strong id="dropTitle">Drop your image here</strong><p id="dropSub">PNG, JPG, WEBP and other image formats · up to 15 MB</p><button id="choose" class="btn" type="button">Choose image</button><img id="preview" class="preview" alt="Selected image preview" hidden></div>
+<input id="file" class="sr" type="file" accept="image/*">
+<div class="controls"><label for="language">Language</label><select id="language"><option value="eng">English</option><option value="spa">Spanish</option><option value="fra">French</option><option value="deu">German</option><option value="ita">Italian</option><option value="por">Portuguese</option></select><button id="extract" class="btn" disabled>Extract text</button></div>
+<p class="hint">For best results, use a sharp, well-lit image with readable text. The first scan may take longer while language data loads.</p></div>
+<div class="panel output"><div class="panel-head"><h2>Extracted text</h2><span class="step">STEP 02</span></div>
+<textarea id="result" class="result" placeholder="Your extracted text will appear here. You can edit it before copying or downloading." aria-label="Extracted text"></textarea>
+<div class="progress-wrap" aria-hidden="true"><div id="progress" class="progress"></div></div><p id="status" class="status" role="status" aria-live="polite">Ready when you are.</p>
+<div class="actions"><button id="copy" class="btn secondary" disabled>Copy text</button><button id="download" class="btn secondary" disabled>Download .txt</button><button id="reset" class="btn secondary">Reset</button></div></div>
+</section>
+<p class="foot"><strong>Made for quick, everyday text extraction.</strong><br>Your image is processed in your browser and is not uploaded to an InkLens server. OCR engine and language data load from a CDN, so an internet connection is required.</p>
+</main>
+<script>
+(() => {
+const $=id=>document.getElementById(id);
+const fileInput=$('file'), drop=$('drop'), preview=$('preview'), extract=$('extract'), result=$('result'), status=$('status'), progress=$('progress');
+let selected=null, busy=false, previewUrl='';
+function message(text){status.textContent=text}
+function chooseFile(file){
+ if(!file)return;
+ if(!file.type.startsWith('image/')){message('Please choose a valid image file.');return}
+ if(file.size>15*1024*1024){message('That image is over 15 MB. Choose a smaller image.');return}
+ if(previewUrl)URL.revokeObjectURL(previewUrl);
+ selected=file;previewUrl=URL.createObjectURL(file);preview.src=previewUrl;preview.hidden=false;
+ $('dropTitle').textContent=file.name;$('dropSub').textContent=(file.size/1024/1024).toFixed(2)+' MB · Ready to scan';
+ extract.disabled=false;result.value='';$('copy').disabled=true;$('download').disabled=true;progress.style.width='0%';message('Image ready. Select “Extract text” to begin.');
+}
+$('choose').addEventListener('click',e=>{e.stopPropagation();fileInput.click()});
+drop.addEventListener('click',e=>{if(e.target.closest('button'))return;fileInput.click()});
+drop.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();fileInput.click()}});
+fileInput.addEventListener('change',()=>chooseFile(fileInput.files[0]));
+for(const name of ['dragenter','dragover'])drop.addEventListener(name,e=>{e.preventDefault();drop.classList.add('over')});
+for(const name of ['dragleave','drop'])drop.addEventListener(name,e=>{e.preventDefault();drop.classList.remove('over')});
+drop.addEventListener('drop',e=>chooseFile(e.dataTransfer.files[0]));
+extract.addEventListener('click',async()=>{
+ if(!selected||busy)return;
+ if(!window.Tesseract){message('OCR engine did not load. Check your connection and refresh the page.');return}
+ busy=true;extract.disabled=true;$('choose').disabled=true;$('reset').disabled=true;result.value='';progress.style.width='0%';message('Starting OCR engine…');
+ let worker;
+ try{
+  worker=await Tesseract.createWorker($('language').value,1,{logger:m=>{if(m.status==='recognizing text'){progress.style.width=Math.round((m.progress||0)*100)+'%';message('Recognizing text… '+Math.round((m.progress||0)*100)+'%')}else if(m.status==='loading language traineddata')message('Loading language data…')}});
+  const out=await worker.recognize(selected);result.value=(out.data.text||'').trim();progress.style.width='100%';
+  if(result.value){message('Done. Review or edit the extracted text below.');$('copy').disabled=false;$('download').disabled=false}
+  else message('No readable text found. Try a sharper or brighter image.');
+ }catch(err){console.error(err);message('Text extraction failed. Check your connection and try again.')}
+ finally{if(worker){try{await worker.terminate()}catch(e){}}busy=false;extract.disabled=!selected;$('choose').disabled=false;$('reset').disabled=false}
+});
+result.addEventListener('input',()=>{const has=!!result.value.trim();$('copy').disabled=!has;$('download').disabled=!has});
+$('copy').addEventListener('click',async()=>{try{await navigator.clipboard.writeText(result.value);message('Text copied to clipboard.')}catch(e){result.focus();result.select();message('Clipboard access was blocked. The text is selected so you can copy it manually.')}});
+$('download').addEventListener('click',()=>{const blob=new Blob([result.value],{type:'text/plain;charset=utf-8'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=(selected?.name.replace(/\.[^.]+$/,'')||'inklens-text')+'.txt';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000)});
+$('reset').addEventListener('click',()=>{if(busy)return;if(previewUrl)URL.revokeObjectURL(previewUrl);previewUrl='';selected=null;fileInput.value='';preview.removeAttribute('src');preview.hidden=true;$('dropTitle').textContent='Drop your image here';$('dropSub').textContent='PNG, JPG, WEBP and other image formats · up to 15 MB';extract.disabled=true;result.value='';$('copy').disabled=true;$('download').disabled=true;progress.style.width='0%';message('Ready when you are.')});
+window.addEventListener('beforeunload',()=>{if(previewUrl)URL.revokeObjectURL(previewUrl)});
+})();
+</script>
+</body></html>
